@@ -6,7 +6,7 @@ public class LineaVentaPruebas
 {
     private static readonly IReadOnlyDictionary<string, Producto> Catalogo = new Dictionary<string, Producto>
     {
-        ["7501055300075"] = new Producto("7501055300075", "Refresco Cola 600ml", "Bebidas", 18.50m, 24, 60),
+        ["7501055300075"] = new Producto("7501055300075", "Refresco Cola 600ml", "Bebidas", 18.50m, 24, 60, false),
     };
 
     [Fact]

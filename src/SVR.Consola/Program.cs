@@ -50,6 +50,7 @@ foreach (FilaCsv fila in filasVentas)
     {
         if (LineaVenta.TryCrear(fila.Campos, catalogo, out LineaVenta? venta, out string? motivoRechazo))
         {
+            ValidadorVenta.Validar(venta!, catalogo[venta!.Ean]);
             ventasValidas.Add(venta!);
         }
         else
@@ -67,8 +68,8 @@ File.WriteAllLines(Path.Combine(datos, "rechazos.log"), rechazosVentas);
 Console.WriteLine($"HU-02 ventas -> válidas: {ventasValidas.Count} | rechazadas: {rechazosVentas.Count} (ver rechazos.log)");
 Console.WriteLine();
 
-// Avance 2 (10:15–11:15) · TODO: HU-03 promociones, HU-04 medios de pago,
-//   HU-05 reglas de venta, HU-06 inventario.
+// Avance 2 (10:15–11:15) · HU-05 reglas de venta -> ver ValidadorVenta.cs (arriba, dentro del
+//   loop de HU-02). TODO: HU-03 promociones, HU-04 medios de pago, HU-06 inventario.
 
 // Avance 3 (11:15–12:15) · TODO: HU-07 CEDIS en paralelo con timeout,
 //   HU-08 pedido sugerido, top de ventas y corte de caja.

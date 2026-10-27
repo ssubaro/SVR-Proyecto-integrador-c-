@@ -11,7 +11,8 @@ public sealed record Producto(
     string Categoria,
     decimal Precio,
     int PuntoReorden,
-    int Stock)
+    int Stock,
+    bool Bloqueado)
 {
     /// <summary>
     /// Intenta crear un Producto a partir de los campos crudos de catalogo.csv.
@@ -21,7 +22,7 @@ public sealed record Producto(
     {
         producto = null;
 
-        if (campos.Length != 6)
+        if (campos.Length != 7)
         {
             motivoRechazo = "formato inválido";
             return false;
@@ -41,8 +42,9 @@ public sealed record Producto(
 
         int.TryParse(campos[4], NumberStyles.Integer, CultureInfo.InvariantCulture, out int puntoReorden);
         int.TryParse(campos[5], NumberStyles.Integer, CultureInfo.InvariantCulture, out int stock);
+        bool bloqueado = string.Equals(campos[6], "SI", StringComparison.OrdinalIgnoreCase);
 
-        producto = new Producto(campos[0], campos[1], campos[2], precio, puntoReorden, stock);
+        producto = new Producto(campos[0], campos[1], campos[2], precio, puntoReorden, stock, bloqueado);
         motivoRechazo = null;
         return true;
     }
