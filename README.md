@@ -37,6 +37,7 @@ En Windows (cmd o PowerShell) los mismos comandos funcionan igual, parado en `SV
 | `Reglas` | `src/SVR.Dominio/Reglas.cs` | Tasa de IVA, horario de alcohol y máximo en vales, sin números mágicos |
 | Datos | `datos/` | Catálogo, promociones y ventas del día; se copian junto al ejecutable |
 | Prueba de ejemplo | `tests/SVR.Pruebas` | Prueba de `LectorCsv`, como plantilla para tus pruebas |
+| HU-08 | `ServicioReporteVentas`, `CorteCajaExportador` | Calcula pedido sugerido y top 5 por piezas; genera `corte_caja.csv` con `ProductoId,Importe` usando precios de catálogo, sin aplicar promociones |
 
 ## Lo que construyes
 
@@ -59,5 +60,4 @@ Regla de dependencias: Consola → Infraestructura → Aplicación → Dominio. 
   - línea 5: `piezas = abc` → error de formato
   - línea 6: alcohol a las 23:30 → `VentaRestringidaException`
   - además, cualquier línea con un EAN marcado `bloqueado=SI` en el catálogo → `VentaRestringidaException` (HU-05)
-
-Agrega 50 a 100 líneas de venta propias para que el reporte y el pedido sugerido tengan sentido.
+- **HU-08:** el pedido sugerido repone productos no bloqueados con stock menor al punto de reorden hasta alcanzar ese punto. El top 5 se ordena por piezas vendidas. El corte agrupa por EAN y estima el importe con el precio de catálogo; el archivo `corte_caja.csv` se genera junto al ejecutable.
