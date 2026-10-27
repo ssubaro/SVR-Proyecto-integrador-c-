@@ -7,13 +7,25 @@ para que el día 2 dediques el tiempo a la lógica de negocio.
 - **.NET 8** y **C# 12** (`Directory.Build.props`); `global.json` pide un SDK 8.0.
 - Compila y corre desde el inicio: muestra las filas leídas y las historias pendientes.
 
+## Requisitos
+
+- [.NET SDK 8.0](https://dotnet.microsoft.com/download/dotnet/8.0) o superior (verifica con `dotnet --version`; `global.json` fija `8.0.100` con `rollForward: latestFeature`).
+- Ejecutar los comandos desde esta carpeta (`SVR/`, donde está `SVR.sln`).
+
 ## Cómo correr
 
 ```bash
+# Restaura paquetes y compila toda la solución
 dotnet build
+
+# Corre la consola (lee datos/ y, tras HU-02, genera datos/rechazos.log junto al .exe)
 dotnet run --project src/SVR.Consola
+
+# Corre las pruebas
 dotnet test
 ```
+
+En Windows (cmd o PowerShell) los mismos comandos funcionan igual, parado en `SVR/`.
 
 ## Lo que ya funciona
 

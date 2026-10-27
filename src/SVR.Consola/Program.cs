@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using SVR.Dominio;
 using SVR.Infraestructura;
 
 // Sistema de Venta y Reabastecimiento (SVR) · cierre del día de la tienda 0457.
@@ -20,17 +21,54 @@ Console.WriteLine($"Ejemplo: línea {filasVentas[0].Linea} -> {string.Join(" | "
 Console.WriteLine();
 
 // Avance 1 (9:35–10:15)
-Pendiente("HU-01 Cargar el catálogo y rechazar EAN vacío o precio inválido");
-Pendiente("HU-02 Procesar ventas_0457.csv y escribir rechazos.log (línea y motivo)");
 
-// Avance 2 (10:15–11:15)
-Pendiente("HU-03 Aplicar la promoción vigente de cada producto");
-Pendiente("HU-04 Validar el pago según su medio: efectivo, tarjeta o vales");
-Pendiente("HU-05 No vender alcohol fuera de horario ni productos bloqueados");
-Pendiente("HU-06 Descontar inventario y avisar si no hay stock suficiente");
+// HU-01: cargar el catálogo y rechazar EAN vacío o precio inválido.
+var catalogo = new Dictionary<string, Producto>();
+int catalogoRechazados = 0;
+foreach (FilaCsv fila in filasCatalogo)
+{
+    if (Producto.TryCrear(fila.Campos, out Producto? producto, out string? motivoRechazo))
+    {
+        catalogo[producto!.Ean] = producto;
+    }
+    else
+    {
+        Console.WriteLine($"[catálogo] Línea {fila.Linea} rechazada: {motivoRechazo}");
+        catalogoRechazados++;
+    }
+}
 
-// Avance 3 (11:15–12:15)
-Pendiente("HU-07 Consultar existencias del CEDIS en paralelo con timeout de 3 s");
-Pendiente("HU-08 Pedido sugerido, top de ventas y corte de caja en CSV");
+Console.WriteLine($"HU-01 catálogo -> válidos: {catalogo.Count} | rechazados: {catalogoRechazados}");
+Console.WriteLine();
 
-static void Pendiente(string historia) => Console.WriteLine($"[pendiente] {historia}");
+// HU-02: procesar ventas_0457.csv y escribir rechazos.log (línea y motivo).
+var ventasValidas = new List<LineaVenta>();
+var rechazosVentas = new List<string>();
+foreach (FilaCsv fila in filasVentas)
+{
+    try
+    {
+        if (LineaVenta.TryCrear(fila.Campos, catalogo, out LineaVenta? venta, out string? motivoRechazo))
+        {
+            ventasValidas.Add(venta!);
+        }
+        else
+        {
+            rechazosVentas.Add($"Línea {fila.Linea}: {motivoRechazo}");
+        }
+    }
+    catch (TiendaException ex)
+    {
+        rechazosVentas.Add($"Línea {fila.Linea}: {ex.Message}");
+    }
+}
+
+File.WriteAllLines(Path.Combine(datos, "rechazos.log"), rechazosVentas);
+Console.WriteLine($"HU-02 ventas -> válidas: {ventasValidas.Count} | rechazadas: {rechazosVentas.Count} (ver rechazos.log)");
+Console.WriteLine();
+
+// Avance 2 (10:15–11:15) · TODO: HU-03 promociones, HU-04 medios de pago,
+//   HU-05 reglas de venta, HU-06 inventario.
+
+// Avance 3 (11:15–12:15) · TODO: HU-07 CEDIS en paralelo con timeout,
+//   HU-08 pedido sugerido, top de ventas y corte de caja.
