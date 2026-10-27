@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Globalization;
 using SVR.Aplicacion;
 using SVR.Dominio;
@@ -94,4 +94,28 @@ Console.WriteLine($"HU-07 CEDIS -> consultados: {existenciasCedis.Count} | respo
     $"usó stock local: {existenciasCedis.Count - respondioCedis} | {cronometroCedis.ElapsedMilliseconds} ms");
 Console.WriteLine();
 
-// Avance 3 (11:15–12:15) · TODO: HU-08 pedido sugerido, top de ventas y corte de caja.
+// HU-08: genera el pedido sugerido, el top 5 y el corte a partir de las ventas válidas.
+var servicioReporte = new ServicioReporteVentas();
+ReporteVentas reporte = servicioReporte.Generar(catalogo, ventasValidas);
+
+Console.WriteLine("HU-08 pedido sugerido (reposición hasta punto de reorden):");
+foreach (PedidoSugerido pedido in reporte.PedidoSugerido)
+{
+    Console.WriteLine(
+        $"  {pedido.ProductoId} · {pedido.Descripcion}: pedir {pedido.PiezasSugeridas} (stock {pedido.StockActual}, mínimo {pedido.PuntoReorden})");
+}
+
+Console.WriteLine("HU-08 top 5 por piezas vendidas:");
+foreach (ProductoTopVentas producto in reporte.TopVentas)
+{
+    Console.WriteLine($"  {producto.ProductoId} · {producto.Descripcion}: {producto.PiezasVendidas} piezas");
+}
+
+// Exporta el importe estimado por producto al lado del ejecutable.
+string rutaCorte = Path.Combine(datos, "corte_caja.csv");
+using (var exportador = new CorteCajaExportador(rutaCorte))
+{
+    exportador.Escribir(reporte.CorteCaja);
+}
+
+Console.WriteLine($"HU-08 corte CSV generado: {rutaCorte} (importes estimados con precio de catálogo, sin promociones)");

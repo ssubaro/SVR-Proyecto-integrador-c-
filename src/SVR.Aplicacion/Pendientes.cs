@@ -7,6 +7,4 @@ namespace SVR.Aplicacion;
 //   - Una línea inválida va a rechazos.log con número de línea y motivo; el proceso no se detiene.
 
 // HU-07: ServicioReabasto -> ver ServicioReabasto.cs.
-
-// HU-08 · TODO: ServicioReabasto
-//   - Calcula el pedido sugerido con LINQ: productos en o bajo su punto de reorden. Módulo 4.
+// HU-08: ServicioReporteVentas -> ver ServicioReporteVentas.cs.
