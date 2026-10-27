@@ -4,6 +4,7 @@ namespace SVR.Pruebas;
 
 public class PagoPruebas
 {
+    // Comprueba que el efectivo suficiente se acepte y que se calcule correctamente el cambio.
     [Fact]
     public void Efectivo_ConImporteSuficiente_ValidaYCalculaCambio()
     {
@@ -13,6 +14,7 @@ public class PagoPruebas
         Assert.Equal(80m, pago.CalcularCambio(420m));
     }
 
+    // Comprueba que un pago insuficiente se rechace y no permita calcular cambio.
     [Fact]
     public void Efectivo_ConImporteInsuficiente_NoValida()
     {
@@ -22,6 +24,7 @@ public class PagoPruebas
         Assert.Throws<InvalidOperationException>(() => pago.CalcularCambio(420m));
     }
 
+    // Comprueba que la tarjeta requiera autorización y el importe exacto.
     [Fact]
     public void Tarjeta_RequiereAutorizacionEImporteExacto()
     {
@@ -30,6 +33,7 @@ public class PagoPruebas
         Assert.False(new Tarjeta(421m, true).Validar(420m));
     }
 
+    // Comprueba que los vales cubran el total sin rebasar el límite por ticket.
     [Fact]
     public void Vales_RequierenCubrirTotalYSinExcederLimite()
     {
@@ -38,6 +42,7 @@ public class PagoPruebas
         Assert.False(new Vales(1_001m).Validar(1_001m));
     }
 
+    // Comprueba que un total negativo se trate como dato inválido.
     [Fact]
     public void Validar_ConTotalNegativo_LanzaArgumentOutOfRangeException()
     {
