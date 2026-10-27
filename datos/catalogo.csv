@@ -1,8 +1,8 @@
 ean,descripcion,categoria,precio,punto_reorden,stock,bloqueado
-7501055300075,Refresco Cola 600ml,Bebidas,18.50,24,60,NO
+7501055300075,Refresco Cola 600ml,Bebidas,18.50,24,20,NO
 7501000111206,Galletas Marias 170g,Abarrotes,21.00,8,15,NO
 7501234500011,Cerveza Clara 355ml,Alcohol,22.00,36,96,NO
-7501030411111,Yogurt Fresa 1L,Lacteos,34.00,6,10,NO
+7501030411111,Yogurt Fresa 1L,Lacteos,34.00,6,5,NO
 7501122334455,Pan Blanco Grande,Panaderia,32.50,10,20,NO
 7501998877665,Leche Entera 1L,Lacteos,24.00,15,40,SI
 ,Detergente Liquido 1L,Limpieza,45.00,5,12,NO
@@ -10,7 +10,7 @@ ean,descripcion,categoria,precio,punto_reorden,stock,bloqueado
 7502334455667,Agua Natural 1.5L,Bebidas,15.00,30,80,NO
 7502998001122,Cafe Soluble 100g,Abarrotes,N/D,20,18,NO
 7503112233445,Jamon de Pavo 250g,Lacteos,55.00,8,14,SI
-7503556677889,Cereal Hojuelas 500g,Abarrotes,42.00,10,22,NO
+7503556677889,Cereal Hojuelas 500g,Abarrotes,42.00,10,8,NO
 7504001122334,Chocolate en Barra 90g,Abarrotes,19.50,20,45,NO
 7504223344556,Vino Tinto 750ml,Alcohol,120.00,6,10,NO
 7504667788990,Jugo de Naranja 1L,Bebidas,26.00,12,30,NO
