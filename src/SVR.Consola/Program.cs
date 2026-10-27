@@ -41,6 +41,9 @@ foreach (FilaCsv fila in filasCatalogo)
 Console.WriteLine($"HU-01 catálogo -> válidos: {catalogo.Count} | rechazados: {catalogoRechazados}");
 Console.WriteLine();
 
+// HU-06: inventario en memoria, inicializado con el stock del catálogo.
+var inventario = new InventarioEnMemoria(catalogo.Values);
+
 // HU-02: procesar ventas_0457.csv y escribir rechazos.log (línea y motivo).
 var ventasValidas = new List<LineaVenta>();
 var rechazosVentas = new List<string>();
@@ -50,6 +53,7 @@ foreach (FilaCsv fila in filasVentas)
     {
         if (LineaVenta.TryCrear(fila.Campos, catalogo, out LineaVenta? venta, out string? motivoRechazo))
         {
+            inventario.Descontar(venta!.Ean, venta.Piezas);
             ventasValidas.Add(venta!);
         }
         else
@@ -67,8 +71,8 @@ File.WriteAllLines(Path.Combine(datos, "rechazos.log"), rechazosVentas);
 Console.WriteLine($"HU-02 ventas -> válidas: {ventasValidas.Count} | rechazadas: {rechazosVentas.Count} (ver rechazos.log)");
 Console.WriteLine();
 
-// Avance 2 (10:15–11:15) · TODO: HU-03 promociones, HU-04 medios de pago,
-//   HU-05 reglas de venta, HU-06 inventario.
+// Avance 2 (10:15–11:15) · HU-06 inventario -> ver InventarioEnMemoria.cs (arriba, dentro del
+//   loop de HU-02). TODO: HU-03 promociones, HU-04 medios de pago, HU-05 reglas de venta.
 
 // Avance 3 (11:15–12:15) · TODO: HU-07 CEDIS en paralelo con timeout,
 //   HU-08 pedido sugerido, top de ventas y corte de caja.

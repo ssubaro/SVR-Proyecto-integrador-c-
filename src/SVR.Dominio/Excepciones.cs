@@ -23,3 +23,21 @@ public sealed class ProductoNoEncontradoException : TiendaException
         Ean = ean;
     }
 }
+
+/// <summary>
+/// HU-06: no hay piezas suficientes en inventario para descontar la venta.
+/// </summary>
+public sealed class StockInsuficienteException : TiendaException
+{
+    public string Ean { get; }
+    public int Disponible { get; }
+    public int Solicitado { get; }
+
+    public StockInsuficienteException(string ean, int disponible, int solicitado)
+        : base($"stock insuficiente de {ean}: hay {disponible}, se pidieron {solicitado}")
+    {
+        Ean = ean;
+        Disponible = disponible;
+        Solicitado = solicitado;
+    }
+}
