@@ -14,4 +14,7 @@ public static class Reglas
 
     /// <summary>Máximo que se acepta en vales por ticket (HU-04).</summary>
     public const decimal MaximoEnVales = 1_000m;
+
+    /// <summary>Tiempo máximo para esperar al CEDIS antes de usar el stock local (HU-07).</summary>
+    public static readonly TimeSpan TimeoutConsultaCedis = TimeSpan.FromSeconds(3);
 }
