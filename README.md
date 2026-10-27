@@ -52,11 +52,12 @@ Regla de dependencias: Consola → Infraestructura → Aplicación → Dominio. 
 
 ## Los datos
 
-- **catalogo.csv:** EAN, descripción, categoría, precio (con IVA y punto decimal), punto de reorden y stock.
+- **catalogo.csv:** EAN, descripción, categoría, precio (con IVA y punto decimal), punto de reorden, stock y `bloqueado` (`SI`/`NO`; HU-05, p. ej. retiro de calidad o baja del producto).
 - **promociones.csv:** `NXM 2;1` = lleva 2, paga 1 · `PORCENTAJE 15` = 15 % de descuento · `VOLUMEN 6;18.00` = desde 6 piezas, cada una a $18.00.
 - **ventas_0457.csv:** tiene errores a propósito. El sistema debe rechazarlos con número de línea y motivo, y seguir:
   - línea 4: EAN inexistente → `ProductoNoEncontradoException`
   - línea 5: `piezas = abc` → error de formato
   - línea 6: alcohol a las 23:30 → `VentaRestringidaException`
+  - además, cualquier línea con un EAN marcado `bloqueado=SI` en el catálogo → `VentaRestringidaException` (HU-05)
 
 Agrega 50 a 100 líneas de venta propias para que el reporte y el pedido sugerido tengan sentido.

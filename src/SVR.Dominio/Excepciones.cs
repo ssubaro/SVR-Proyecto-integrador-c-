@@ -23,3 +23,19 @@ public sealed class ProductoNoEncontradoException : TiendaException
         Ean = ean;
     }
 }
+
+/// <summary>
+/// HU-05: la venta viola una restricción de negocio (alcohol fuera de horario, producto bloqueado).
+/// </summary>
+public sealed class VentaRestringidaException : TiendaException
+{
+    public string Ean { get; }
+    public string Motivo { get; }
+
+    public VentaRestringidaException(string ean, string motivo)
+        : base($"venta restringida: EAN {ean} ({motivo})")
+    {
+        Ean = ean;
+        Motivo = motivo;
+    }
+}
