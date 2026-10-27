@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+using System.Diagnostics;
+using System.Globalization;
 using SVR.Aplicacion;
 using SVR.Dominio;
 using SVR.Infraestructura;
@@ -14,7 +15,7 @@ string datos = Path.Combine(AppContext.BaseDirectory, "datos");
 var filasCatalogo = LectorCsv.Leer(Path.Combine(datos, "catalogo.csv")).ToList();
 var filasPromociones = LectorCsv.Leer(Path.Combine(datos, "promociones.csv")).ToList();
 var filasVentas = LectorCsv.Leer(Path.Combine(datos, "ventas_0457.csv")).ToList();
-var cedis = new CedisSimulado();   // lo usarás en HU-07
+var cedis = new CedisSimulado();
 
 Console.WriteLine("=== SVR · TIENDA 0457 ===");
 Console.WriteLine($"Filas leídas: catálogo {filasCatalogo.Count} · promociones {filasPromociones.Count} · ventas {filasVentas.Count}");
@@ -75,6 +76,23 @@ Console.WriteLine();
 
 // Avance 2 (10:15–11:15) · HU-05 reglas de venta y HU-06 inventario -> ver ValidadorVenta.cs e
 //   InventarioEnMemoria.cs (arriba, dentro del loop de HU-02). TODO: HU-03 promociones, HU-04 medios de pago.
+
+// HU-07: consultar existencias del CEDIS en paralelo con timeout de 3 s.
+var servicioReabasto = new ServicioReabasto(cedis);
+var stockLocal = catalogo.Keys.ToDictionary(ean => ean, ean => inventario.Stock(ean));
+var cronometroCedis = Stopwatch.StartNew();
+var existenciasCedis = await servicioReabasto.ConsultarExistenciasAsync(stockLocal);
+cronometroCedis.Stop();
+
+foreach (var (ean, resultado) in existenciasCedis.Where(kv => !kv.Value.DeCedis))
+{
+    Console.WriteLine($"[CEDIS] {ean}: sin respuesta a tiempo, se usó stock local ({resultado.Existencia})");
+}
+
+int respondioCedis = existenciasCedis.Values.Count(r => r.DeCedis);
+Console.WriteLine($"HU-07 CEDIS -> consultados: {existenciasCedis.Count} | respondió CEDIS: {respondioCedis} | " +
+    $"usó stock local: {existenciasCedis.Count - respondioCedis} | {cronometroCedis.ElapsedMilliseconds} ms");
+Console.WriteLine();
 
 // HU-08: genera el pedido sugerido, el top 5 y el corte a partir de las ventas válidas.
 var servicioReporte = new ServicioReporteVentas();

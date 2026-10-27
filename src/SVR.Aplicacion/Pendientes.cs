@@ -6,8 +6,5 @@ namespace SVR.Aplicacion;
 //     aplica la promoción vigente, valida el medio de pago y descuenta inventario.
 //   - Una línea inválida va a rechazos.log con número de línea y motivo; el proceso no se detiene.
 
-// HU-07 · TODO: ServicioReabasto
-//   - Recibe ICedisServicio por constructor.
-//   - Consulta la existencia de todos los productos en paralelo (Task.WhenAll) con un timeout
-//     de 3 segundos (CancellationTokenSource). Si el CEDIS no responde, sigue con el stock local
-//     y lo informa. Módulo 6.
+// HU-07: ServicioReabasto -> ver ServicioReabasto.cs.
+// HU-08: ServicioReporteVentas -> ver ServicioReporteVentas.cs.
